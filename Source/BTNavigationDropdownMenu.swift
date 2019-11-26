@@ -280,7 +280,7 @@ open class BTNavigationDropdownMenu: UIView {
         }
 
         // Get titleSize
-        let titleSize: CGSize
+        var titleSize: CGSize
         let titleToDisplay: String
 
         switch title{
@@ -293,13 +293,25 @@ open class BTNavigationDropdownMenu: UIView {
         case .title(let title):
             titleToDisplay = title
         }
-
+        
         titleSize = (titleToDisplay as NSString).size(withAttributes: [NSAttributedString.Key.font:self.configuration.navigationBarTitleFont])
+        
+        for itemTitle in items {
+            let tmpSize = (itemTitle as NSString).size(withAttributes: [NSAttributedString.Key.font:self.configuration.navigationBarTitleFont])
+            
+            if titleSize.width < tmpSize.width {
+                titleSize = tmpSize
+            }
+        }
 
         // Set frame
-        let frame = CGRect(x: 0, y: 0, width: titleSize.width + (self.configuration.arrowPadding + self.configuration.arrowImage.size.width)*2, height: self.navigationController!.navigationBar.frame.height)
+        let totalWidth = titleSize.width + self.configuration.arrowPadding;
+        let frame = CGRect(x: 0, y: 0, width: totalWidth, height: self.navigationController!.navigationBar.frame.height)
 
         super.init(frame:frame)
+        
+        //self.layer.borderColor = UIColor.blue.cgColor
+        //self.layer.borderWidth = 1.0
 
         self.isShown = false
         self.items = items
@@ -309,11 +321,12 @@ open class BTNavigationDropdownMenu: UIView {
         self.menuButton.addTarget(self, action: #selector(BTNavigationDropdownMenu.menuButtonTapped(_:)), for: UIControl.Event.touchUpInside)
         self.addSubview(self.menuButton)
 
-        self.menuTitle = UILabel(frame: frame)
+        let subFrame = CGRect(x: 0, y: 0, width: titleSize.width, height: self.navigationController!.navigationBar.frame.height)
+        self.menuTitle = UILabel(frame: subFrame)
         self.menuTitle.text = titleToDisplay
         self.menuTitle.textColor = self.menuTitleColor
         self.menuTitle.font = self.configuration.navigationBarTitleFont
-        self.menuTitle.textAlignment = self.configuration.cellTextLabelAlignment
+        self.menuTitle.textAlignment = .right
         self.menuButton.addSubview(self.menuTitle)
 
         self.menuArrow = UIImageView(image: self.configuration.arrowImage.withRenderingMode(.alwaysTemplate))
@@ -377,11 +390,16 @@ open class BTNavigationDropdownMenu: UIView {
     }
 
     override open func layoutSubviews() {
-        self.menuTitle.sizeToFit()
-        self.menuTitle.center = CGPoint(x: self.frame.size.width/2, y: self.frame.size.height/2)
-        self.menuTitle.textColor = self.configuration.menuTitleColor
         self.menuArrow.sizeToFit()
-        self.menuArrow.center = CGPoint(x: self.menuTitle.frame.maxX + self.configuration.arrowPadding, y: self.frame.size.height/2)
+        self.menuArrow.center = CGPoint(x: self.menuButton.frame.size.width + self.configuration.arrowImage.size.width - self.configuration.arrowPadding, y: self.frame.size.height/2)
+        //self.menuButton.layer.borderColor = UIColor.red.cgColor
+        //self.menuButton.layer.borderWidth = 2.0
+        //self.menuTitle.sizeToFit()
+        //self.menuTitle.center = CGPoint(x: self.frame.size.width/2, y: self.frame.size.height/2)
+        //self.menuTitle.center = CGPoint(x: (self.menuButton.frame.size.width - self.configuration.arrowPadding - self.configuration.arrowImage.size.width) / 2, y: self.frame.size.height/2)
+        self.menuTitle.textColor = self.configuration.menuTitleColor
+        //self.menuTitle.layer.borderColor = UIColor.green.cgColor
+        //self.menuTitle.layer.borderWidth = 1.0
         self.menuWrapper.frame.origin.y = self.navigationController!.navigationBar.frame.maxY
         self.tableView.reloadData()
     }
@@ -423,10 +441,10 @@ open class BTNavigationDropdownMenu: UIView {
     }
 
     func setupDefaultConfiguration() {
-        self.menuTitleColor = self.navigationController?.navigationBar.titleTextAttributes?[NSAttributedString.Key.foregroundColor] as? UIColor
-        self.cellBackgroundColor = self.navigationController?.navigationBar.barTintColor
-        self.cellSeparatorColor = self.navigationController?.navigationBar.titleTextAttributes?[NSAttributedString.Key.foregroundColor] as? UIColor
-        self.cellTextLabelColor = self.navigationController?.navigationBar.titleTextAttributes?[NSAttributedString.Key.foregroundColor] as? UIColor
+        //self.menuTitleColor = self.navigationController?.navigationBar.titleTextAttributes?[NSAttributedString.Key.foregroundColor] as? UIColor
+        //self.cellBackgroundColor = self.navigationController?.navigationBar.barTintColor
+        //self.cellSeparatorColor = self.navigationController?.navigationBar.titleTextAttributes?[NSAttributedString.Key.foregroundColor] as? UIColor
+        //self.cellTextLabelColor = self.navigationController?.navigationBar.titleTextAttributes?[NSAttributedString.Key.foregroundColor] as? UIColor
 
         self.arrowTintColor = self.configuration.arrowTintColor
     }

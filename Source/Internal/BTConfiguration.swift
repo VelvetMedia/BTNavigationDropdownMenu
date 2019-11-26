@@ -57,22 +57,22 @@ final class BTConfiguration {
         let arrowImagePath = imageBundle?.path(forResource: "arrow_down_icon", ofType: "png")
         
         // Default values
-        self.menuTitleColor = UIColor.darkGray
+        self.menuTitleColor = UIColor.white
         self.cellHeight = 50
-        self.cellBackgroundColor = UIColor.white
+        self.cellBackgroundColor = UIColor.black
         self.arrowTintColor = UIColor.white
         self.cellSeparatorColor = UIColor.darkGray
-        self.cellTextLabelColor = UIColor.darkGray
+        self.cellTextLabelColor = UIColor.white
         self.selectedCellTextLabelColor = UIColor.darkGray
-        self.cellTextLabelFont = UIFont(name: "HelveticaNeue-Bold", size: 17)
-        self.navigationBarTitleFont = UIFont(name: "HelveticaNeue-Bold", size: 17)
+        self.cellTextLabelFont = UIFont(name: "Rubik-Regular", size: 20.0)
+        self.navigationBarTitleFont = UIFont(name: "Rubik-Regular", size: 13.0)
         self.cellTextLabelAlignment = NSTextAlignment.left
-        self.cellSelectionColor = UIColor.lightGray
+        self.cellSelectionColor = UIColor.black
         self.checkMarkImage = UIImage(contentsOfFile: checkMarkImagePath!)
         self.shouldKeepSelectedCellColor = false
-        self.animationDuration = 0.5
+        self.animationDuration = 0.3
         self.arrowImage = UIImage(contentsOfFile: arrowImagePath!)
-        self.arrowPadding = 15
+        self.arrowPadding = 10
         self.maskBackgroundColor = UIColor.black
         self.maskBackgroundOpacity = 0.3
         self.shouldChangeTitleText = true
